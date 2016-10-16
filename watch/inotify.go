@@ -8,9 +8,9 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aristanetworks/fsnotify"
 	"github.com/aristanetworks/tail/util"
 
-	"gopkg.in/fsnotify.v1"
 	"gopkg.in/tomb.v1"
 )
 
