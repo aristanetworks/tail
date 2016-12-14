@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	ErrStop = fmt.Errorf("tail should now stop")
+	ErrStop = errors.New("tail should now stop")
 )
 
 type Line struct {
@@ -251,7 +251,7 @@ func (tail *Tail) tailFileSync() {
 
 	tail.openReader()
 
-	var offset int64 = 0
+	var offset int64
 	var err error
 
 	// Read line by line.
@@ -274,10 +274,9 @@ func (tail *Tail) tailFileSync() {
 			if cooloff {
 				// Wait a second before seeking till the end of
 				// file when rate limit is reached.
-				msg := fmt.Sprintf(
-					"Too much log activity; waiting a second " +
-						"before resuming tailing")
-				tail.Lines <- &Line{msg, time.Now(), fmt.Errorf(msg)}
+				msg := ("Too much log activity; waiting a second " +
+					"before resuming tailing")
+				tail.Lines <- &Line{msg, time.Now(), errors.New(msg)}
 				select {
 				case <-time.After(time.Second):
 				case <-tail.Dying():
